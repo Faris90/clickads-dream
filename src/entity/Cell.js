@@ -96,33 +96,9 @@ Cell.prototype.getSquareSize = function () {
   return (100 * this.mass) >> 0;
 };
 
-Cell.prototype.addMass = function (n) {
-  //todo needs to surpass for a longer duration (timout?)
-  var client = this.owner;
-  var gameServer = this.owner.gameServer;
-  if (!client.verify && gameServer.config.verify == 1) {
-
-
-  } else {
-
-    if (this.mass + n > this.owner.gameServer.config.playerMaxMass && this.owner.cells.length < this.owner.gameServer.config.playerMaxCells) {
-
-      this.mass = this.mass + n;
-      this.mass = this.mass/2;
-      var randomAngle = Math.random() * 6.28; // Get random angle
-      this.owner.gameServer.autoSplit(this.owner, this, randomAngle, this.mass, 480);
-    } else {
-      this.mass += n;
-      var th = this;
-
-      setTimeout(function () {
-        th.mass = Math.min(th.mass, th.owner.gameServer.config.playerMaxMass);
-
-      }, 1000);
-
-    }
-  }
-};
+Cell.prototype.addMass = function(n) {
+    this.mass = Math.min(this.mass + n,this.owner.gameServer.config.playerMaxMass);
+}
 Cell.prototype.getSpeed = function () {
   // Old formula: 5 + (20 * (1 - (this.mass/(70+this.mass))));
   // Based on 50ms ticks. If updateMoveEngine interval changes, change 50 to new value
